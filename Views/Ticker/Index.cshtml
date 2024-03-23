@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Ticker Data</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>ETH/USDT Ticker Data</h1>
+    <div id="tickerData">
+        Last Price: <span id="lastPrice"></span><br />
+        Low Price 24h: <span id="lowPrice"></span><br />
+        High Price 24h: <span id="highPrice"></span>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Функция для загрузки данных через AJAX
+            function loadData() {
+                $.ajax({
+                    url: '/Ticker/GetTickerData', // URL метода на сервере
+                    type: 'GET',
+                    cache: false, // Отключение кэширования запроса
+                    success: function (data) {
+                        // Обновляем данные на странице
+                        $('#lastPrice').text(data.lastPrice.toFixed(2)); // Округляем до двух знаков после запятой
+                        $('#lowPrice').text(data.lowPrice24h.toFixed(2)); // Округляем до двух знаков после запятой
+                        $('#highPrice').text(data.highPrice24h.toFixed(2)); // Округляем до двух знаков после запятой
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+            // Запускаем загрузку данных при загрузке страницы и каждую секунду
+            loadData(); // Загрузить данные при загрузке страницы
+            setInterval(loadData, 100); // Обновлять каждую секунду
+        });
+
+    </script>
+</body>
+</html>
